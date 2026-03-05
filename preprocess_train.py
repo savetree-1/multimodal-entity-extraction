@@ -1,7 +1,7 @@
 import pandas as pd
 import re
 
-df_train = pd.read_csv('train.csv')
+df_train = pd.read_csv('/workspace/multimodal/data/train.csv')
 
 # Define the accepted units
 accepted_units = {
@@ -48,4 +48,4 @@ def process_dataframe(df):
 
 processed_df = process_dataframe(df_train)
 
-processed_df.to_csv("data/processed_train.csv",index = False)
+processed_df.to_csv("/workspace/multimodal/data/processed_train.csv", index=False)

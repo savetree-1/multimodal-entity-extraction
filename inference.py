@@ -18,11 +18,11 @@ model = Qwen2VLForConditionalGeneration.from_pretrained(
     torch_dtype=torch.bfloat16,
     attn_implementation="flash_attention_2",
     device_map="auto",
-    cache_dir="/scratch/m23csa016/"
+    cache_dir="/workspace/multimodal/"
 )
 
 # Load the PEFT adapter
-adapter_path = "/scratch/m23csa016/training/checkpoint-100/"
+adapter_path = "/workspace/multimodal/saves/qwen2vl_lora_sft/"  # will be set after training
 
 # Load the PEFT config
 peft_config = PeftConfig.from_pretrained(adapter_path)
@@ -35,11 +35,11 @@ model.set_adapter("default")
 print("PEFT adapter loaded and set active")
 
 # Load the processor
-processor = AutoProcessor.from_pretrained(model_name, cache_dir="/scratch/m23csa016/", max_pixels=1280*28*28)
+processor = AutoProcessor.from_pretrained(model_name, cache_dir="/workspace/multimodal/", max_pixels=1280*28*28)
 print("Loaded processor")
 
 print("Loading data...")
-df = pd.read_csv("/csehome/m23csa016/AML/student_resource3/dataset/test.csv")
+df = pd.read_csv("/workspace/multimodal/data/test.csv")
 print(f"Data loaded. Total rows: {len(df)}")
 
 output_file = "test_inf.csv"
@@ -58,7 +58,7 @@ def process_chunk(chunk):
         message = [{
             "role": "user",
             "content": [
-                {"type": "image", "image": f"/scratch/m23csa016/aml/test/{image_name}"},
+                {"type": "image", "image": f"/workspace/multimodal/data/archive/images/test/{image_name}"},
                 {"type": "text", "text": f"What is the {c.entity_name}?"}
             ]
         }]
